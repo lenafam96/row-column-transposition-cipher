@@ -1,3 +1,9 @@
+*{
+  padding: 0;
+  margin: 0;
+
+}
+
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -143,3 +149,29 @@ textarea{
   #plain_text, #cipher_text {
     overflow-wrap: anywhere;
   }
+
+
+  .table-encrypt{
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .table-encrypt > tr> td{
+    
+    text-align: center;
+  }
+  .table-encrypt > tr:nth-child(odd){
+    background-color: lightgray;
+
+  }
+  .table-encrypt > tr:nth-child(even){
+    background-color: teal;
+    color: #fff;
+
+  }
+  td{
+    width: 54px;
+    height: 14px;
+  }
+
+

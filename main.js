@@ -1,3 +1,5 @@
+
+let table;
 function inputValid(e) {
     let invalidChars = ["-","+","e","E"];
     if(invalidChars.includes(e.key)) {
@@ -14,7 +16,7 @@ function encrypt(){
     let cipher_text = document.getElementById('cipher_text');
     let result = "";
     key = isNaN(key)?0:key;
-    let table = []
+    table = []
     for (let index = 0; index < key; index++) {
         let row = Array(plain_text.length).fill("");
         table.push(row);
@@ -34,6 +36,7 @@ function encrypt(){
         result = result.replace(" ","&nbsp;");
     }
     cipher_text.innerHTML = result;
+    createMatrixDisplay("matrixEncrypt");
 
 }
 
@@ -58,7 +61,7 @@ function decrypt(){
     let plain_text = document.getElementById('plain_text');
     let result = "";
     key = isNaN(key)?0:key;
-    let table = []
+    table = []
     for (let index = 0; index < key; index++) {
         let row = Array(cipher_text.length).fill("");
         table.push(row);
@@ -83,6 +86,7 @@ function decrypt(){
         i+=dr;
     }
     plain_text.innerHTML = result;
+    createMatrixDisplay("matrixDecrypt");
 }
 
 const saveFileDecrypt = () => {
@@ -114,5 +118,30 @@ async function handleSaveFile(result,fileName){
       SaveFile.click();
       setTimeout(() => URL.revokeObjectURL( SaveFile.href ), 60000 );
     }
+  }
+
+  function createMatrixDisplay(id){
+    let key = Number.parseInt(document.getElementById('key_encrypt').value);
+    let plain_text = document.getElementById('input_plain_text').value;
+    const matrix = document.getElementById(id)
+    console.log(matrix, key, plain_text.length );
+    while(matrix.firstChild){
+        matrix.removeChild(matrix.lastChild)
+    }
+
+    const table1 = document.createElement("table")
+    table1.className = "table-encrypt";
+    for (let i = 0; i < key; i++) {
+      const trEle = document.createElement("tr")
+      for (let j = 0; j < plain_text.length; j++) {
+          const tdEle = document.createElement('td')
+        //   tdEle.id = 'cell-'+i+'-'+j;
+        tdEle.innerHTML= table[i][j]===" "? "&nbsp;": table[i][j];
+          trEle.appendChild(tdEle)
+      }
+      table1.appendChild(trEle);
+      matrix.appendChild(table1)
+    }
+
   }
 
