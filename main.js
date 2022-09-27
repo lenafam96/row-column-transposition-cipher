@@ -1,6 +1,6 @@
-let table;
+let array;
 function inputValid(e) {
-    let invalidChars = ["-","+","e","E"];
+    let invalidChars = ["-","+","e","E","0"];
     if(invalidChars.includes(e.key)) {
         e.preventDefault();
     }
@@ -14,10 +14,24 @@ function encrypt(){
     let key = document.getElementById('key_encrypt').value;
     let cipher_text = document.getElementById('cipher_text');
     let result = "";
-    
-    
+    let key_array = key.split("").map(Number);
+
+    let dr = 0;
+    array = [];
+    for (let i = 0; i < plain_text.length/key.length; i++) {
+        let row = [];
+        for (let j = 0; j < key.length; j++) {
+            row.push(plain_text.length>dr?plain_text[dr++]:"");
+        }
+        array.push(row);
+    }
+    for (let i = 0; i < key.length; i++) {
+        for (let j = 0; j < plain_text.length/key.length; j++) {
+            result += array[j][key_array.indexOf(i+1)]===" "?"&nbsp;":array[j][key_array.indexOf(i+1)];
+        }
+    }
     cipher_text.innerHTML = result;
-    createMatrixDisplay("matrixEncrypt");
+    // createMatrixDisplay("matrixEncrypt");
 
 }
 
@@ -41,10 +55,29 @@ function decrypt(){
     let key = document.getElementById('key_decrypt').value;
     let plain_text = document.getElementById('plain_text');
     let result = "";
+    let key_array = key.split("").map(Number);
     
-    
+    let dr = 0;
+    array = [];
+    let numberOfRowHasMoreLetter = cipher_text.length%key.length;
+    let numberOfColumn = Number.parseInt(cipher_text.length/key.length) + 1;
+    for (let i = 0; i < key.length; i++) {
+        let row = [];
+        for (let j = 0; j < numberOfColumn; j++) {
+            if(key_array.indexOf(i+1)<numberOfRowHasMoreLetter)
+                row.push(cipher_text[dr++]);
+            else
+                row.push(j !== numberOfColumn-1?cipher_text[dr++]:"");
+        }
+        array.push(row);
+    }
+    for (let i = 0; i < numberOfColumn; i++) {
+        for (let j = 0; j < key.length; j++) {
+            result += array[key_array[j]-1][i]===" "?"&nbsp;":array[key_array[j]-1][i];
+        }
+    }
     plain_text.innerHTML = result;
-    createMatrixDisplay("matrixDecrypt");
+    // createMatrixDisplay("matrixDecrypt");
 }
 
 const saveFileDecrypt = () => {
