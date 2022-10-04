@@ -6,12 +6,31 @@ function inputValid(e) {
   }
 }
 
+function checkValidKeyword(key_array){
+    const key_set = [... new Set(key_array)];
+    // console.log(key_set,key_set.length,Math.min(...key_set),Math.max(...key_set));
+    if (key_set.length !== key_array.length)
+        return false;
+    if (Math.min(...key_set) !== 1)
+        return false;
+    if (Math.max(...key_set) !== key_set.length)
+        return false;
+    return true;
+}
+
 function encrypt() {
   let plain_text = document.getElementById("input_plain_text").value;
   let key = document.getElementById("key_encrypt").value;
   let cipher_text = document.getElementById("cipher_text");
   let result = "";
   let key_array = key.split("").map(Number);
+
+  if(!checkValidKeyword(key_array)){
+    showSnakeBar();
+    return;
+  }
+
+  if(plain_text.length === 0)   return;
 
   let dr = 0;
   array = [];
@@ -31,7 +50,7 @@ function encrypt() {
     }
   }
   cipher_text.innerHTML = result;
-  console.log(key_array, array);
+//   console.log(key_array, array);
   createMatrixDisplay("matrixEncrypt");
 }
 
@@ -54,6 +73,14 @@ function decrypt() {
   let result = "";
   let key_array = key.split("").map(Number);
 
+
+  if(!checkValidKeyword(key_array)){
+    showSnakeBar();
+    return;
+  }
+
+  if(cipher_text.length === 0)   return;
+
   let dr = 0;
   array = [];
   let numberOfRowHasMoreLetter = cipher_text.length % key.length;
@@ -75,9 +102,16 @@ function decrypt() {
           : array[key_array[j] - 1][i];
     }
   }
+  console.log(array);
   plain_text.innerHTML = result;
-  // createMatrixDisplay("matrixDecrypt");
+  createMatrixDisplay("matrixDecrypt");
 }
+
+function showSnakeBar() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  }
 
 const saveFileDecrypt = () => {
   result = document.getElementById("plain_text").innerHTML;
@@ -116,7 +150,7 @@ function createMatrixDisplay(id) {
   let key_array = key.split("").map(Number);
   let plain_text = document.getElementById("input_plain_text").value;
   const matrix = document.getElementById(id);
-  console.log(matrix, key, plain_text.length);
+//   console.log(matrix, key, plain_text.length);
   while (matrix.firstChild) {
     matrix.removeChild(matrix.lastChild);
   }
