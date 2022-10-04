@@ -192,3 +192,7 @@ th {
   background-color: brown;
   color: #fff;
 }
+.table-encrypt > tr > td.th {
+  color: white;
+  background-color: brown;
+}

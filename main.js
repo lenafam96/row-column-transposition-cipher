@@ -6,16 +6,13 @@ function inputValid(e) {
   }
 }
 
-function checkValidKeyword(key_array){
-    const key_set = [... new Set(key_array)];
-    // console.log(key_set,key_set.length,Math.min(...key_set),Math.max(...key_set));
-    if (key_set.length !== key_array.length)
-        return false;
-    if (Math.min(...key_set) !== 1)
-        return false;
-    if (Math.max(...key_set) !== key_set.length)
-        return false;
-    return true;
+function checkValidKeyword(key_array) {
+  const key_set = [...new Set(key_array)];
+  // console.log(key_set,key_set.length,Math.min(...key_set),Math.max(...key_set));
+  if (key_set.length !== key_array.length) return false;
+  if (Math.min(...key_set) !== 1) return false;
+  if (Math.max(...key_set) !== key_set.length) return false;
+  return true;
 }
 
 function encrypt() {
@@ -25,12 +22,12 @@ function encrypt() {
   let result = "";
   let key_array = key.split("").map(Number);
 
-  if(!checkValidKeyword(key_array)){
+  if (!checkValidKeyword(key_array)) {
     showSnakeBar();
     return;
   }
 
-  if(plain_text.length === 0)   return;
+  if (plain_text.length === 0) return;
 
   let dr = 0;
   array = [];
@@ -50,7 +47,7 @@ function encrypt() {
     }
   }
   cipher_text.innerHTML = result;
-//   console.log(key_array, array);
+  //   console.log(key_array, array);
   createMatrixDisplay("matrixEncrypt");
 }
 
@@ -73,18 +70,20 @@ function decrypt() {
   let result = "";
   let key_array = key.split("").map(Number);
 
-
-  if(!checkValidKeyword(key_array)){
+  if (!checkValidKeyword(key_array)) {
     showSnakeBar();
     return;
   }
 
-  if(cipher_text.length === 0)   return;
+  if (cipher_text.length === 0) return;
 
   let dr = 0;
-  array = Array.from({
-        length: key_array.length
-    }, () => new Array());
+  array = Array.from(
+    {
+      length: key_array.length,
+    },
+    () => new Array()
+  );
   let numberOfRowHasMoreLetter = cipher_text.length % key.length;
   let numberOfColumn = Number.parseInt(cipher_text.length / key.length) + 1;
   for (let i = 0; i < key.length; i++) {
@@ -94,14 +93,11 @@ function decrypt() {
         row.push(cipher_text[dr++]);
       else row.push(j !== numberOfColumn - 1 ? cipher_text[dr++] : "");
     }
-    array[key_array.indexOf(i+1)]=row;
+    array[key_array.indexOf(i + 1)] = row;
   }
   for (let i = 0; i < numberOfColumn; i++) {
     for (let j = 0; j < key.length; j++) {
-    result +=
-        array[j][i] === " "
-          ? "&nbsp;"
-          : array[j][i];
+      result += array[j][i] === " " ? "&nbsp;" : array[j][i];
     }
   }
   console.log(array);
@@ -110,10 +106,12 @@ function decrypt() {
 }
 
 function showSnakeBar() {
-    var x = document.getElementById("snackbar");
-    x.className = "show";
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-  }
+  var x = document.getElementById("snackbar");
+  x.className = "show";
+  setTimeout(function () {
+    x.className = x.className.replace("show", "");
+  }, 3000);
+}
 
 const saveFileDecrypt = () => {
   result = document.getElementById("plain_text").innerHTML;
@@ -152,7 +150,7 @@ function createMatrixDisplay(id) {
   let key_array = key.split("").map(Number);
   let plain_text = document.getElementById("input_plain_text").value;
   const matrix = document.getElementById(id);
-//   console.log(matrix, key, plain_text.length);
+  //   console.log(matrix, key, plain_text.length);
   while (matrix.firstChild) {
     matrix.removeChild(matrix.lastChild);
   }
@@ -160,22 +158,23 @@ function createMatrixDisplay(id) {
   const table1 = document.createElement("table");
   table1.className = "table-encrypt";
 
-  if(id === "matrixEncrypt"){
+  if (id === "matrixEncrypt") {
     for (let i = 0; i < key_array.length; i++) {
-        const thELe = document.createElement("th");
-        thELe.innerHTML = key_array[i];
-        table1.appendChild(thELe);
-        matrix.appendChild(table1);
+      const thELe = document.createElement("th");
+      thELe.innerHTML = key_array[i];
+      table1.appendChild(thELe);
+      matrix.appendChild(table1);
     }
   }
 
   for (let i = 0; i < key_array.length; i++) {
     const trEle = document.createElement("tr");
-    if(id === "matrixDecrypt"){
-            const thELe = document.createElement("th");
-            thELe.innerHTML = key_array[i];
-            trEle.appendChild(thELe);
-        }
+    if (id === "matrixDecrypt") {
+      const thELe = document.createElement("td");
+      thELe.classList.add("th");
+      thELe.innerHTML = key_array[i];
+      trEle.appendChild(thELe);
+    }
     for (let j = 0; j < array[0].length; j++) {
       const tdEle = document.createElement("td");
       //   tdEle.id = 'cell-'+i+'-'+j;
