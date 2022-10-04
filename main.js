@@ -82,7 +82,9 @@ function decrypt() {
   if(cipher_text.length === 0)   return;
 
   let dr = 0;
-  array = [];
+  array = Array.from({
+        length: key_array.length
+    }, () => new Array());
   let numberOfRowHasMoreLetter = cipher_text.length % key.length;
   let numberOfColumn = Number.parseInt(cipher_text.length / key.length) + 1;
   for (let i = 0; i < key.length; i++) {
@@ -92,14 +94,14 @@ function decrypt() {
         row.push(cipher_text[dr++]);
       else row.push(j !== numberOfColumn - 1 ? cipher_text[dr++] : "");
     }
-    array.push(row);
+    array[key_array.indexOf(i+1)]=row;
   }
   for (let i = 0; i < numberOfColumn; i++) {
     for (let j = 0; j < key.length; j++) {
-      result +=
-        array[key_array[j] - 1][i] === " "
+    result +=
+        array[j][i] === " "
           ? "&nbsp;"
-          : array[key_array[j] - 1][i];
+          : array[j][i];
     }
   }
   console.log(array);
@@ -158,16 +160,22 @@ function createMatrixDisplay(id) {
   const table1 = document.createElement("table");
   table1.className = "table-encrypt";
 
-  for (let i = 0; i < key_array.length; i++) {
-    const thELe = document.createElement("th");
-    thELe.innerHTML = key_array[i];
-    table1.appendChild(thELe);
-    matrix.appendChild(table1);
+  if(id === "matrixEncrypt"){
+    for (let i = 0; i < key_array.length; i++) {
+        const thELe = document.createElement("th");
+        thELe.innerHTML = key_array[i];
+        table1.appendChild(thELe);
+        matrix.appendChild(table1);
+    }
   }
 
   for (let i = 0; i < key_array.length; i++) {
     const trEle = document.createElement("tr");
-
+    if(id === "matrixDecrypt"){
+            const thELe = document.createElement("th");
+            thELe.innerHTML = key_array[i];
+            trEle.appendChild(thELe);
+        }
     for (let j = 0; j < array[0].length; j++) {
       const tdEle = document.createElement("td");
       //   tdEle.id = 'cell-'+i+'-'+j;
