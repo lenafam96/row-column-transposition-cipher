@@ -89,15 +89,21 @@ function decrypt() {
   for (let i = 0; i < key.length; i++) {
     let row = [];
     for (let j = 0; j < numberOfColumn; j++) {
-      if (key_array.indexOf(i + 1) < numberOfRowHasMoreLetter)
-        row.push(cipher_text[dr++]);
-      else row.push(j !== numberOfColumn - 1 ? cipher_text[dr++] : "");
+      if(numberOfRowHasMoreLetter === 0){
+        if(j<numberOfColumn - 1)
+            row.push(cipher_text[dr++]);
+      }else{
+            if (key_array.indexOf(i + 1) < numberOfRowHasMoreLetter)
+                row.push(cipher_text[dr++]);
+            else row.push(j !== numberOfColumn - 1 ? cipher_text[dr++] : "");
+      }
     }
     array[key_array.indexOf(i + 1)] = row;
   }
   for (let i = 0; i < numberOfColumn; i++) {
     for (let j = 0; j < key.length; j++) {
-      result += array[j][i] === " " ? "&nbsp;" : array[j][i];
+      if(array[j][i])
+        result += array[j][i] === " " ? "&nbsp;" : array[j][i];
     }
   }
   console.log(array);
