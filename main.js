@@ -106,7 +106,6 @@ function decrypt() {
         result += array[j][i] === " " ? "&nbsp;" : array[j][i];
     }
   }
-  console.log(array);
   plain_text.innerHTML = result;
   createMatrixDisplay("matrixDecrypt");
 }
